@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { useStateManagment } from '../../state-managment/state';
+import { Link } from 'react-router-dom';
 
 const CoinList = () => {
     const { state, dispatch } = useStateManagment();
@@ -31,39 +32,39 @@ const CoinList = () => {
     return (
         <section className='mb-10'>
             <div className="" style={{ maxWidth: "1250px", margin: "0 auto", padding: "0 10px" }}>
-                <Table className='overflow-x-auto ' style={{ backgroundColor: "#16171A" }}>
+                <Table className='overflow-x-auto whitespace-nowrap w-[600px] sm:w-full' style={{ backgroundColor: "#16171A" }}>
                     <TableHeader className='bg-sky-300'>
                         <TableRow className=''>
-                            <TableHead className="font-bold text-gray-900 w-4/12">Coin</TableHead>
-                            <TableHead className='font-bold text-gray-900 w-2/12 text-right'>Price</TableHead>
-                            <TableHead className='font-bold text-gray-900 w-2/12 text-right'>24h Change</TableHead>
-                            <TableHead className="font-bold text-gray-900 w-2/12 text-right">Market Cap</TableHead>
+                            <TableHead className="font-bold text-gray-900 w-4/12 text-xs sm:text-sm py-3 sm:py-5">Coin</TableHead>
+                            <TableHead className='font-bold text-gray-900 w-2/12 text-right text-xs sm:text-sm py-3 sm:py-5'>Price</TableHead>
+                            <TableHead className='font-bold text-gray-900 w-2/12 text-right text-xs sm:text-sm py-3 sm:py-5'>24h Change</TableHead>
+                            <TableHead className="font-bold text-gray-900 w-2/12 text-right text-xs sm:text-sm py-3 sm:py-5">Market Cap</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody className='border-b border-zinc-700'>
                         {state.allCoins.map(coin => (
                             <TableRow key={coin.id} className='transition hover:bg-zinc-800 cursor-pointer border-b border-zinc-700'>
-                                <TableCell className="font-medium flex items-center gap-4">
-                                    <img src={coin.image} alt='coinimage' width={50} height={50} />
+                                <TableCell className="font-medium flex items-center gap-4 py-2 sm:py-4">
+                                    <img src={coin.image} alt='coinimage' width={50} height={50} className='w-10 h-10 sm:w-14 sm:h-14' />
                                     <div className='flex flex-col justify-start'>
-                                        <span className='text-white font-normal text-xl uppercase'>{coin.symbol}</span>
+                                        <Link to={`/coin-details/${coin.id}`} className='text-white font-normal text-base sm:text-xl uppercase hover:underline'>{coin.symbol}</Link>
                                         <span className='text-muted-foreground text-sm capitalize'>{coin.name}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell className='text-right'>
-                                    <span className='font-medium text-white'>$ {coin.current_price}</span>
+                                <TableCell className='text-right py-2 sm:py-4'>
+                                    <span className='font-medium text-white text-xs sm:text-sm'>$ {coin.current_price}</span>
                                 </TableCell>
-                                <TableCell className='text-right'>
-                                    <div className='flex justify-end items-center gap-4'>
+                                <TableCell className='text-right py-2 sm:py-4'>
+                                    <div className='flex justify-end items-center gap-2 sm:gap-4'>
                                         {coin.price_change_percentage_24h > 0 ? (
-                                            <span className='font-medium text-green-500'>+ {coin.price_change_percentage_24h}%</span>
+                                            <span className='font-medium text-green-500 text-xs sm:text-sm'>+ {coin.price_change_percentage_24h}%</span>
                                         ) : (
-                                            <span className='font-medium text-red-500'>{coin.price_change_percentage_24h}%</span>
+                                            <span className='font-medium text-red-500 text-xs sm:text-sm'>{coin.price_change_percentage_24h}%</span>
                                         )}
                                         <button type='button' className='' onClick={() => handleToggleWatchlist(coin)}>
                                             {state.watchList.some(watchlistCoin => watchlistCoin.id === coin.id) ? (
-                                                <svg width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                                                    <rect width="27" height="28" fill="url(#pattern0_2_266)" />
+                                                <svg className='w-5 h-5 sm:w-7 sm:h-7' width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+                                                    <rect width="26" height="24" fill="url(#pattern0_2_266)" />
                                                     <defs>
                                                         <pattern id="pattern0_2_266" patternContentUnits="objectBoundingBox" width="1" height="1">
                                                             <use xlinkHref="#image0_2_266" transform="matrix(0.01 0 0 0.00964286 0 0.0178571)" />
@@ -72,7 +73,7 @@ const CoinList = () => {
                                                     </defs>
                                                 </svg>
                                             ) : (
-                                                <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+                                                <svg className='w-5 h-5 sm:w-7 sm:h-7' width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                                                     <rect width="26" height="24" fill="url(#pattern0_2_269)" />
                                                     <defs>
                                                         <pattern id="pattern0_2_269" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -88,8 +89,8 @@ const CoinList = () => {
 
                                     </div>
                                 </TableCell>
-                                <TableCell className="text-right font-medium text-white uppercase">
-                                    <span className='font-medium text-white'>$ {formatNumber(coin.market_cap)}</span>
+                                <TableCell className="text-right font-medium text-white uppercase py-2 sm:py-4">
+                                    <span className='font-medium text-white text-xs sm:text-sm'>$ {formatNumber(coin.market_cap)}</span>
                                 </TableCell>
                             </TableRow>
                         ))}

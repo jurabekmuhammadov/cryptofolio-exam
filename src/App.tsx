@@ -1,25 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Home from './pages/Home';
+import CoinDetails from './pages/CoinDetails';
+import Header from './layout/header';
+import { StateProvider } from './state-managment/state';
+import WatchList from './layout/watchlist';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <StateProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/coin-details" element={<CoinDetails />} />
+        </Routes>
+        <WatchList />
+      </StateProvider>
+    </BrowserRouter>
   );
 }
 

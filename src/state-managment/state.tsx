@@ -14,6 +14,7 @@ type StateActions =
     | { type: 'SET_ALL_COINS', payload: any[] }
     | { type: 'SET_CURRENT_PAGE', payload: number }
     | { type: 'ADD_TO_WATCHLIST', payload: {} }
+    | { type: 'REMOVE_FROM_WATCHLIST', payload: { id: string } }
 
 interface StateContextProps {
     state: State;
@@ -24,7 +25,7 @@ const StateContext = createContext<StateContextProps | undefined>(undefined);
 
 const initialState: State = {
     isOpen: false,
-    watchList: [],
+    watchList: JSON.parse(localStorage.getItem('watchlist') || '[]'),
     allCoins: [],
     currentPage: 1,
     perPage: 10,
@@ -47,6 +48,20 @@ const StateReducer = (state: State, action: StateActions): State => {
             return {
                 ...state,
                 currentPage: action.payload,
+            };
+        case 'ADD_TO_WATCHLIST':
+            const updatedWatchlist = [...state.watchList, action.payload];
+            localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+            return {
+                ...state,
+                watchList: updatedWatchlist,
+            };
+        case 'REMOVE_FROM_WATCHLIST':
+            const updatedWatchlistRemove = state.watchList.filter(coin => coin.id !== action.payload.id);
+            localStorage.setItem('watchlist', JSON.stringify(updatedWatchlistRemove));
+            return {
+                ...state,
+                watchList: updatedWatchlistRemove,
             };
         default:
             return state;

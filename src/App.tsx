@@ -5,6 +5,8 @@ import CoinDetails from './pages/CoinDetails';
 import Header from './layout/header';
 import { StateProvider } from './state-managment/state';
 import WatchList from './layout/watchlist';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -16,6 +18,17 @@ function App() {
           <Route path="/coin-details/:coinId" element={<CoinDetails />} />
         </Routes>
         <WatchList />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light" />
       </StateProvider>
     </BrowserRouter>
   );

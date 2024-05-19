@@ -1,7 +1,9 @@
-const Diagram = () => {
+import React from 'react'
+
+const index = () => {
     return (
-        <div>Diagram</div>
+        <div>index</div>
     )
 }
 
-export default Diagram
+export default index

@@ -9,16 +9,31 @@ import {
 } from "../../components/ui/carousel";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useStateManagment } from "../../state-managment/state";
 
 export function CarouselPlugin() {
-    const [coins, setCoins] = useState([])
+    const { state } = useStateManagment();
+    const [coins, setCoins] = useState([]);
+
+    let currency: string;
+
+    if (state.currency === "usd") {
+        currency = "$"
+    } else if (state.currency === "eur") {
+        currency = "€"
+    } else if (state.currency === "rub") {
+        currency = "₽"
+    } else {
+        currency = "$"
+    }
+
     const plugin = useRef(
         Autoplay({ delay: 4000, stopOnMouseEnter: true, stopOnInteraction: false })
     );
 
     const getAllCoins = async () => {
         try {
-            const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=gecko_desc&per_page=${100}&page=${1}&sparkline=false&price_change_percentage=24h`);
+            const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${state.currency}&order=gecko_desc&per_page=${100}&page=${1}&sparkline=false&price_change_percentage=24h`);
             const data = await response.json();
             setCoins(data)
         } catch (error) {
@@ -28,7 +43,7 @@ export function CarouselPlugin() {
 
     useEffect(() => {
         getAllCoins()
-    }, [coins])
+    }, [coins]);
 
     const groupArray = (data: any, size: any) => {
         const result = [];
@@ -48,7 +63,7 @@ export function CarouselPlugin() {
             onMouseEnter={plugin.current.stop}
             onMouseLeave={plugin.current.reset}
         >
-            <CarouselContent className="w-full hidden sm:flex">
+            <CarouselContent className="w-full">
                 {groupedCoins4.map((coinGroup, index) => (
                     <CarouselItem key={index} className="flex items-center justify-around">
                         {coinGroup.map((coin: any, idx: any) => {
@@ -63,7 +78,7 @@ export function CarouselPlugin() {
                                             </span>
                                         </p>
                                         <p className='font-semibold text-sm sm:text-base md:text-lg text-white leading-5 md:leading-6'>
-                                            $ {coin.current_price.toLocaleString()}
+                                            {currency} {coin.current_price.toLocaleString()}
                                         </p>
                                     </div>
                                 </Link>
@@ -87,7 +102,7 @@ export function CarouselPlugin() {
                                             </span>
                                         </p>
                                         <p className='font-semibold text-sm sm:text-base md:text-lg text-white leading-5 md:leading-6'>
-                                            $ {coin.current_price.toLocaleString()}
+                                            {currency} {coin.current_price}
                                         </p>
                                     </div>
                                 </Link>

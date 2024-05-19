@@ -5,8 +5,9 @@ interface State {
     watchList: any[];
     allCoins: any[];
     currentPage: number;
-    perPage: number,
-    totalPages: number
+    perPage: number;
+    totalPages: number;
+    currency: string;
 }
 
 type StateActions =
@@ -15,6 +16,7 @@ type StateActions =
     | { type: 'SET_CURRENT_PAGE', payload: number }
     | { type: 'ADD_TO_WATCHLIST', payload: {} }
     | { type: 'REMOVE_FROM_WATCHLIST', payload: { id: string } }
+    | { type: 'CHANGE_CURRENCY', payload: string }
 
 interface StateContextProps {
     state: State;
@@ -30,6 +32,7 @@ const initialState: State = {
     currentPage: 1,
     perPage: 10,
     totalPages: 10,
+    currency: "usd"
 };
 
 const StateReducer = (state: State, action: StateActions): State => {
@@ -63,6 +66,11 @@ const StateReducer = (state: State, action: StateActions): State => {
                 ...state,
                 watchList: updatedWatchlistRemove,
             };
+        case 'CHANGE_CURRENCY':
+            return {
+                ...state,
+                currency: action.payload,
+            };
         default:
             return state;
     }
@@ -75,9 +83,9 @@ interface StateProviderProps {
 export const StateProvider = ({ children }: StateProviderProps) => {
     const [state, dispatch] = useReducer(StateReducer, initialState);
 
-    const getAllCoins = async (page: number) => {
+    const getAllCoins = async (page: number, currency: string) => {
         try {
-            const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=gecko_desc&per_page=${state.perPage}&page=${page}&sparkline=false&price_change_percentage=24h`);
+            const response = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=${state.perPage}&page=${page}&sparkline=false&price_change_percentage=24h`);
             const data = await response.json();
 
             dispatch({ type: 'SET_ALL_COINS', payload: data });
@@ -87,8 +95,8 @@ export const StateProvider = ({ children }: StateProviderProps) => {
     };
 
     useEffect(() => {
-        getAllCoins(state.currentPage);
-    }, [state.currentPage]);
+        getAllCoins(state.currentPage, state.currency);
+    }, [state.currentPage, state.currency]);
 
     return (
         <StateContext.Provider value={{ state, dispatch }}>

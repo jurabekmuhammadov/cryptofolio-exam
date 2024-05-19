@@ -4,6 +4,17 @@ import { Link } from 'react-router-dom';
 
 const CoinList = () => {
     const { state, dispatch } = useStateManagment();
+    let currency: string;
+
+    if (state.currency === "usd") {
+        currency = "$"
+    } else if (state.currency === "eur") {
+        currency = "€"
+    } else if (state.currency === "rub") {
+        currency = "₽"
+    } else {
+        currency = "$"
+    }
 
     const formatNumber = (number: number) => {
         if (number >= 1_000_000) {
@@ -32,7 +43,7 @@ const CoinList = () => {
     return (
         <section className='mb-10'>
             <div className="" style={{ maxWidth: "1250px", margin: "0 auto", padding: "0 10px" }}>
-                <Table className='overflow-x-auto whitespace-nowrap w-[600px] sm:w-full' style={{ backgroundColor: "#16171A" }}>
+                <Table className='overflow-x-auto whitespace-nowrap w-[600px] sm:w-full' style={{ backgroundColor: "rgb(24 24 27)" }}>
                     <TableHeader className='bg-sky-300'>
                         <TableRow className=''>
                             <TableHead className="font-bold text-gray-900 w-4/12 text-xs sm:text-sm py-3 sm:py-5">Coin</TableHead>
@@ -52,7 +63,7 @@ const CoinList = () => {
                                     </div>
                                 </TableCell>
                                 <TableCell className='text-right py-2 sm:py-4'>
-                                    <span className='font-medium text-white text-xs sm:text-sm'>$ {coin.current_price}</span>
+                                    <span className='font-medium text-white text-xs sm:text-sm'>{currency} {coin.current_price}</span>
                                 </TableCell>
                                 <TableCell className='text-right py-2 sm:py-4'>
                                     <div className='flex justify-end items-center gap-2 sm:gap-4'>
@@ -84,13 +95,11 @@ const CoinList = () => {
                                                 </svg>
                                             )
                                             }
-                                            {""}
                                         </button>
-
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-right font-medium text-white uppercase py-2 sm:py-4">
-                                    <span className='font-medium text-white text-xs sm:text-sm'>$ {formatNumber(coin.market_cap)}</span>
+                                    <span className='font-medium text-white text-xs sm:text-sm'>{currency} {formatNumber(coin.market_cap)}</span>
                                 </TableCell>
                             </TableRow>
                         ))}

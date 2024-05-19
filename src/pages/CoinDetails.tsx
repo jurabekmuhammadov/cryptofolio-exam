@@ -1,3 +1,4 @@
+import Diagram from "../components/diagram";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -52,21 +53,22 @@ const CoinDetails = () => {
   }
 
   return (
-    <section className='mt-7 mb-52 pl-5 pr-10 flex'>
-      <div className='flex flex-col gap-10 border-r-2 border-zinc-500 pr-8 w-[495px]'>
-        <div className='flex flex-col items-center justify-center gap-10'>
-          <img src={details.image?.large} alt='coinimage' width={170} height={170} />
-          <h1 className='text-white font-bold text-5xl capitalize'>{details.name}</h1>
+    <section className='mt-7 mb-10 lg:mb-52 pl-5 pr-10 flex flex-col lg:flex-row'>
+      <div className='flex flex-col gap-5 lg:gap-10 border-b-2 border-r-0 lg:border-b-0 lg:border-r-2 border-zinc-500 pb-5 sm:pb-8 lg:pr-8 w-full lg:w-[550px]'>
+        <div className='flex flex-col items-center justify-center gap-2 sm:gap-5 lg:gap-10'>
+          <img src={details.image?.large} alt='coinimage' width={160} height={160} className="w-28 h-28 lg:h-40 lg:w-40" />
+          <h1 className='text-white font-bold text-3xl lg:text-5xl capitalize'>{details.name}</h1>
         </div>
         <div>
-          <p className='text-white text-base leading-7 line-clamp-4'>{details.description?.en}</p>
+          <p className='text-white text-sm lg:text-base lg:leading-7 line-clamp-5 text-left sm:text-center lg:text-left'>{details.description?.en}</p>
         </div>
-        <div className='flex flex-col gap-5'>
-          <h1 className='text-white text-2xl font-bold'>Rank: <span className='font-normal'>{details.market_data?.market_cap_rank}</span></h1>
-          <h1 className='text-white text-2xl font-bold'>Current Price: <span className='font-normal'>$ {formatNumber(details.market_data?.current_price?.usd || 0)}</span></h1>
-          <h1 className='text-white text-2xl font-bold'>Market Cap: <span className='font-normal'>$ {formatNumber(details.market_data?.market_cap?.usd || 0)}</span></h1>
+        <div className='flex flex-col gap-0 sm:gap-2 lg:gap-5 items-start sm:items-center lg:items-start'>
+          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Rank: <span className='font-normal'>{details.market_data?.market_cap_rank}</span></h1>
+          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Current Price: <span className='font-normal'>$ {formatNumber(details.market_data?.current_price?.usd || 0)}</span></h1>
+          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Market Cap: <span className='font-normal'>$ {formatNumber(details.market_data?.market_cap?.usd || 0)}</span></h1>
         </div>
       </div>
+      {coinId && <Diagram id={coinId} />}
     </section>
   )
 }

@@ -1,7 +1,7 @@
 import { useStateManagment } from "../state-managment/state"; // Corrected import
-import Diagram from "../components/diagram";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Chart from "../components/chart";
 
 interface CoinDetailsType {
   image: {
@@ -78,7 +78,7 @@ const CoinDetails = () => {
 
   return (
     <section className='mt-7 mb-10 lg:mb-52 pl-5 pr-10 flex flex-col lg:flex-row'>
-      <div className='flex flex-col gap-5 lg:gap-10 border-b-2 border-r-0 lg:border-b-0 lg:border-r-2 border-zinc-500 pb-5 sm:pb-8 lg:pr-8 w-full lg:w-[550px]'>
+      <div className='flex flex-col gap-5 lg:gap-10 border-b-2 border-r-0 lg:border-b-0 lg:border-r-2 border-zinc-500 pb-5 sm:pb-8 lg:pr-8 w-full lg:w-[650px]'>
         <div className='flex flex-col items-center justify-center gap-2 sm:gap-5 lg:gap-10'>
           <img src={details.image?.large} alt='coinimage' width={160} height={160} className="w-28 h-28 lg:h-40 lg:w-40" />
           <h1 className='text-white font-bold text-3xl lg:text-5xl capitalize'>{details.name}</h1>
@@ -92,7 +92,7 @@ const CoinDetails = () => {
           <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Market Cap: <span className='font-normal'>{currencySymbol} {formatNumber(marketCap)}</span></h1>
         </div>
       </div>
-      {coinId && <Diagram id={coinId} />}
+      {coinId && <Chart id={coinId} />}
     </section>
   );
 };

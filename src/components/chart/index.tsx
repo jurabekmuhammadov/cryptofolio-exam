@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 import { useStateManagment } from '../../state-managment/state';
+import ChartTimeLine from '../charttimeline';
 
 interface SeriesData {
     name: string;
     data: { x: Date; y: number }[];
 }
 
-const Diagram = ({ id }: { id: string }) => {
+const Chart = ({ id }: { id: string }) => {
     const { state } = useStateManagment();
     const [series, setSeries] = useState<SeriesData[]>([]);
     const [activeButton, setActiveButton] = useState<number>(1);
@@ -102,14 +103,9 @@ const Diagram = ({ id }: { id: string }) => {
     return (
         <div className='w-full h-full flex flex-col  pt-5 sm:pt-8 lg:pl-10 gap-5'>
             <ReactApexChart options={options} series={series} type="area" height="" />
-            <div className='flex items-center gap-2 sm:gap-5 lg:gap-9'>
-                <button className={`border border-sky-300 outline-none rounded-md text-xs sm:text-sm lg:text-base py-2 lg:py-2.5 w-1/4 font-bold text-left px-2 lg:px-5 ${activeButton === 1 ? 'bg-sky-300 text-gray-900' : 'text-white bg-inherit'}`} onClick={() => handleButtonClick(1)}>24 Hours</button>
-                <button className={`border border-sky-300 outline-none rounded-md text-xs sm:text-sm lg:text-base py-2 lg:py-2.5 w-1/4 font-bold text-left px-2 lg:px-5 ${activeButton === 30 ? 'bg-sky-300 text-gray-900' : 'text-white bg-inherit'}`} onClick={() => handleButtonClick(30)}>30 Days</button>
-                <button className={`border border-sky-300 outline-none rounded-md text-xs sm:text-sm lg:text-base py-2 lg:py-2.5 w-1/4 font-bold text-left px-2 lg:px-5 ${activeButton === 90 ? 'bg-sky-300 text-gray-900' : 'text-white bg-inherit'}`} onClick={() => handleButtonClick(90)}>3 Months</button>
-                <button className={`border border-sky-300 outline-none rounded-md text-xs sm:text-sm lg:text-base py-2 lg:py-2.5 w-1/4 font-bold text-left px-2 lg:px-5 ${activeButton === 365 ? 'bg-sky-300 text-gray-900' : 'text-white bg-inherit'}`} onClick={() => handleButtonClick(365)}>1 Year</button>
-            </div>
+            <ChartTimeLine activeButton={activeButton} handleButtonClick={handleButtonClick} />
         </div>
     );
 }
 
-export default Diagram;
+export default Chart;

@@ -8,7 +8,7 @@ const WatchList: React.FC = () => {
 
 
   return (
-    <div className={`${state.isOpen ? "translate-x-0" : "translate-x-full"} transition shadow-lg shadow-zinc-700 bg-zinc-800 p-4 fixed top-0 right-0 h-screen w-3/4 sm:w-2/4 lg:w-2/5 2xl:w-1/4`}>
+    <div className={`${state.isOpen ? "translate-x-0" : "translate-x-full"} transition shadow-lg shadow-zinc-700 overflow-y-auto bg-zinc-800 p-4 fixed top-0 right-0 h-screen w-3/4 sm:w-2/4 lg:w-2/5 2xl:w-1/4`}>
       <div>
         <button onClick={() => dispatch({ type: 'TOGGLE' })}>
           <X size={28} color='white' />{ }

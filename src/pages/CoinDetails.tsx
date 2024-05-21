@@ -1,3 +1,4 @@
+import { useStateManagment } from "../state-managment/state"; // Corrected import
 import Diagram from "../components/diagram";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -14,9 +15,13 @@ interface CoinDetailsType {
     market_cap_rank: number;
     current_price: {
       usd: number;
+      eur: number;
+      rub: number;
     };
     market_cap: {
       usd: number;
+      eur: number;
+      rub: number;
     };
   };
 }
@@ -24,6 +29,20 @@ interface CoinDetailsType {
 const CoinDetails = () => {
   const { coinId } = useParams<{ coinId: string }>();
   const [details, setDetails] = useState<CoinDetailsType | null>(null);
+  const { state } = useStateManagment();
+
+  const getCurrencySymbol = (currency: string) => {
+    switch (currency) {
+      case 'usd':
+        return '$';
+      case 'eur':
+        return '€';
+      case 'rub':
+        return '₽';
+      default:
+        return '$';
+    }
+  };
 
   const formatNumber = (number: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -40,7 +59,7 @@ const CoinDetails = () => {
     } catch (error) {
       console.error('Failed to fetch coin details:', error);
     }
-  }
+  };
 
   useEffect(() => {
     if (coinId) {
@@ -49,8 +68,13 @@ const CoinDetails = () => {
   }, [coinId]);
 
   if (!details) {
-    return <div>Loading...</div>;
+    return <div className="text-white">Loading...</div>;
   }
+
+  const currencySymbol = getCurrencySymbol(state.currency);
+  const currency = state.currency as keyof typeof details.market_data.current_price;
+  const currentPrice = details.market_data?.current_price[currency] || 0;
+  const marketCap = details.market_data?.market_cap[currency] || 0;
 
   return (
     <section className='mt-7 mb-10 lg:mb-52 pl-5 pr-10 flex flex-col lg:flex-row'>
@@ -64,13 +88,13 @@ const CoinDetails = () => {
         </div>
         <div className='flex flex-col gap-0 sm:gap-2 lg:gap-5 items-start sm:items-center lg:items-start'>
           <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Rank: <span className='font-normal'>{details.market_data?.market_cap_rank}</span></h1>
-          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Current Price: <span className='font-normal'>$ {formatNumber(details.market_data?.current_price?.usd || 0)}</span></h1>
-          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Market Cap: <span className='font-normal'>$ {formatNumber(details.market_data?.market_cap?.usd || 0)}</span></h1>
+          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Current Price: <span className='font-normal'>{currencySymbol} {formatNumber(currentPrice)}</span></h1>
+          <h1 className='text-white text-base sm:text-xl lg:text-2xl font-bold'>Market Cap: <span className='font-normal'>{currencySymbol} {formatNumber(marketCap)}</span></h1>
         </div>
       </div>
       {coinId && <Diagram id={coinId} />}
     </section>
-  )
-}
+  );
+};
 
 export default CoinDetails;

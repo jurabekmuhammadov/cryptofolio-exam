@@ -8,6 +8,7 @@ interface State {
     perPage: number;
     totalPages: number;
     currency: string;
+    searchQuery: string;
 }
 
 type StateActions =
@@ -17,6 +18,7 @@ type StateActions =
     | { type: 'ADD_TO_WATCHLIST', payload: {} }
     | { type: 'REMOVE_FROM_WATCHLIST', payload: { id: string } }
     | { type: 'CHANGE_CURRENCY', payload: string }
+    | { type: 'SET_SEARCH_QUERY', payload: string }
 
 interface StateContextProps {
     state: State;
@@ -32,7 +34,8 @@ const initialState: State = {
     currentPage: 1,
     perPage: 10,
     totalPages: 10,
-    currency: "usd"
+    currency: "usd",
+    searchQuery: ''
 };
 
 const StateReducer = (state: State, action: StateActions): State => {
@@ -71,6 +74,8 @@ const StateReducer = (state: State, action: StateActions): State => {
                 ...state,
                 currency: action.payload,
             };
+        case 'SET_SEARCH_QUERY':
+            return { ...state, searchQuery: action.payload };
         default:
             return state;
     }

@@ -40,6 +40,11 @@ const CoinList = () => {
         }
     };
 
+    const filteredCoins = state.allCoins.filter(coin =>
+        coin.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(state.searchQuery.toLowerCase())
+    );
+
     return (
         <section className='mb-10'>
             <div className="" style={{ maxWidth: "1250px", margin: "0 auto", padding: "0 10px" }}>
@@ -53,7 +58,7 @@ const CoinList = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody className='border-b border-zinc-700'>
-                        {state.allCoins.map(coin => (
+                        {filteredCoins.map(coin => (
                             <TableRow key={coin.id} className='transition hover:bg-zinc-800 cursor-pointer border-b border-zinc-700'>
                                 <TableCell className="font-medium flex items-center gap-4 py-2 sm:py-4">
                                     <img src={coin.image} alt='coinimage' width={50} height={50} className='w-10 h-10 sm:w-14 sm:h-14' />

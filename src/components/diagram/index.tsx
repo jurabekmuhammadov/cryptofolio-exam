@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { useStateManagment } from '../../state-managment/state';
 
 interface SeriesData {
     name: string;
@@ -8,6 +9,7 @@ interface SeriesData {
 }
 
 const Diagram = ({ id }: { id: string }) => {
+    const { state } = useStateManagment();
     const [series, setSeries] = useState<SeriesData[]>([]);
     const [activeButton, setActiveButton] = useState<number>(1);
     const [options] = useState<ApexCharts.ApexOptions>({
@@ -50,7 +52,7 @@ const Diagram = ({ id }: { id: string }) => {
                 },
             },
             title: {
-                text: 'Price (USD)'
+                text: `Price (${state.currency})`
             },
         },
         xaxis: {
@@ -70,7 +72,7 @@ const Diagram = ({ id }: { id: string }) => {
         try {
             const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${id}/market_chart`, {
                 params: {
-                    vs_currency: 'usd',
+                    vs_currency: state.currency,
                     days: days.toString(),
                 }
             });
@@ -90,7 +92,7 @@ const Diagram = ({ id }: { id: string }) => {
 
     useEffect(() => {
         fetchData(1);
-    }, [id]);
+    }, [id, state.currency]);
 
     const handleButtonClick = (days: number) => {
         fetchData(days);
